@@ -1,0 +1,25 @@
+:root {
+  color-scheme: light;
+  --color-background: #fafbf9;
+  --color-turquoise: #eff8f6;
+  --color-text: #465b57;
+  font-family: system-ui, sans-serif;
+  background: var(--color-background);
+  color: var(--color-text);
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+.experience {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.5rem, 5vw, 4rem);
+}
+h1 {
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
