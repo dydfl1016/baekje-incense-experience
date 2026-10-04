@@ -1,3 +1,4 @@
+import { isRenderableDiscovery } from './discovery-schema.js';
 import { placeCallout } from './callout-layout.js';
 // Reusable Discovery UI. No model/material changes and no entrance camera ownership.
 export function cameraPosition(orbit, target) {
@@ -18,7 +19,7 @@ export function createDiscoveryEngine({ viewer, stage, panel, items, isExploring
   let active = null, generation = 0, animationId = null, enabled = false;
   const leader = stage.querySelector('#discovery-leader'), line = leader.querySelector('polyline');
   let trackingId = null, placement = null;
-  const records = items.map(item => {
+  const records = items.filter(isRenderableDiscovery).map(item => {
     const button = document.createElement('button');
     button.type = 'button'; button.className = 'discovery-signal';
     button.slot = `hotspot-${item.id}`; button.dataset.position = positionString(item.anchorPosition);

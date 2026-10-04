@@ -65,3 +65,7 @@ Available prompt: 여기를 눌러보세요. Selection stages the existing camer
 The SVG line grows first, then placeholder eyebrow/title/body/source fade in within approximately 700ms. The full-size model canvas is preserved; there is no reserved text strip. Off-screen margin, clip-depth and facingCamera tests hide line/box/anchor and remove hidden controls from interaction. They return when visible again. Facing-normal detection is an approximation: other geometry can still occlude the anchor; no mesh raycasting is added.
 
 Validation: JS syntax/whitespace, original asset hashes, mock-DOM normal/reduced-motion proximity, interrupt, persistent exploration, moving projection/line, hide/return, close-pose and idle-loop checks passed. Placement bounds and small-motion stability checks passed. Phase 2A mock regression covers reveal/audio/reset. Real WebGL rendering and physical Android gestures/readability/performance are not tested; review the anchor, card overlap and line geometry on device before approving another phase.
+
+## Phase 2C — Empty hierarchical content architecture
+
+Four regions and seventeen detail slots are defined in `js/discoveries.js`. Only the existing phoenix prototype is live; all new slots have null geometry/content and are disabled. Incomplete entries are filtered before hotspot creation. See [authoring instructions](docs/discovery-authoring.md). Check with `node tests/discovery-schema.test.mjs`.
