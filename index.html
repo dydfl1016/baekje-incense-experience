@@ -10,8 +10,32 @@
 </head>
 <body>
   <main class="experience" aria-labelledby="project-title">
-    <h1 id="project-title">백제금동대향로</h1>
-    <!-- The real artifact viewer will be added after Phase 0 approval. -->
+    <header><h1 id="project-title">백제금동대향로</h1></header>
+    <section class="stage" aria-label="향로 살펴보기" aria-busy="true">
+      <model-viewer id="artifact" alt="백제금동대향로 3D 모형. 드래그 또는 방향키로 회전하고 휠 또는 두 손가락으로 확대할 수 있습니다."
+        camera-controls touch-action="none" disable-pan interaction-prompt="none"
+        camera-orbit="0deg 75deg 105%" camera-target="auto auto auto"
+        field-of-view="30deg" min-camera-orbit="auto 0deg 25%" max-camera-orbit="auto 180deg 160%"
+        shadow-intensity="0.25" shadow-softness="1" exposure="1" loading="eager">
+        <span slot="progress-bar"></span>
+      </model-viewer>
+      <div id="loading" class="status" role="status" aria-live="polite">
+        <p id="loading-text">향로를 불러오는 중입니다.</p>
+        <progress id="load-progress" max="1" aria-label="향로 로딩 진행률"></progress>
+        <small>원본 36 MB · 연결 속도에 따라 시간이 걸릴 수 있습니다.</small>
+      </div>
+      <p id="model-error" class="status" role="alert" hidden>향로를 불러오지 못했습니다. 연결을 확인하고 페이지를 새로고침해 주세요.</p>
+    </section>
+    <footer>
+      <p class="hint">드래그로 회전 · 휠 / 두 손가락으로 확대</p>
+      <div class="controls">
+        <button id="reset-view" type="button" disabled>처음 시점</button>
+        <button id="sound-toggle" type="button" aria-pressed="false">소리 켜기</button>
+      </div>
+      <p id="audio-status" class="audio-status" role="status" aria-live="polite">소리 켜기를 누르면 배경음악이 시작됩니다.</p>
+    </footer>
+    <audio id="ambient" loop preload="none"></audio>
+    <noscript><p class="status">3D 향로를 보려면 JavaScript를 켜 주세요.</p></noscript>
   </main>
 </body>
 </html>

@@ -1,49 +1,51 @@
-# Baekje Gilt-bronze Incense Burner
+# Baekje Gilt-bronze Incense Burner — Phase 1
 
-백제금동대향로를 중심으로 하는 몰입형 반응형 웹 경험.
-LE ENGLISH와 분리된 독립 프로젝트입니다.
+백제금동대향로의 실제 원본을 탐색하는 반응형 기능 검증 프로토타입. LE ENGLISH와 분리된 독립 프로젝트입니다. 9개 장면과 최종 연출은 구현하지 않습니다.
 
-## Phase 0
+## Implementation
 
-Project initialization only: minimal HTML/CSS/JS and reserved asset directories.
-No viewer, audio playback, effects, or nine-scene storytelling is implemented.
+Static HTML/CSS/ES module, with Google `<model-viewer>` 4.1.0 loaded from a pinned unpkg URL. No build or package installation is required. The viewer uses its built-in lighting; no additional media or environmental assets are supplied. Runtime CDN access and WebGL are required.
 
-Visual direction: white/off-white, extremely pale turquoise, bronze/gold from the artifact, generous negative space, minimal text and interface.
+- Mouse drag / one-finger touch: orbit. Wheel / pinch: zoom. Arrow keys also rotate the focused viewer.
+- `처음 시점`: restore the initial orbit, target, and field of view. No auto-rotation.
+- `소리 켜기`: explicit user-initiated playback, quiet volume, native audio loop. Toggle pauses/resumes without resetting playback.
+- Small viewer progress indicator; progress represents loading/preparation, not byte-accurate transfer. Model/CDN failure and audio failure show Korean messages.
+- A full-height stage with separate controls keeps phone gestures away from buttons; `touch-action="none"` prevents scrolling within the viewer. `100svh` and safe-area padding account for browser UI.
+- Reduced motion removes camera interpolation. No scripted animation or particles.
 
-## Structure
+## Protected source assets
 
-- `index.html`: minimal HTML foundation
-- `css/style.css`: responsive off-white foundation
-- `js/main.js`: centralized asset URLs
-- `assets/model/`, `assets/audio/`: required owner-supplied media
-- `assets/video/`, `assets/images/`: reserved directories
+References are centralized in `js/main.js`, relative to that module, including under a GitHub Pages project path. Future Blender exports may replace the model at the same path.
 
-## Required assets — not included
+| Asset | Original bytes | SHA-256 |
+|---|---:|---|
+| `assets/model/baekje-incense-burner.glb` | 38129992 | `0fee3b6a4bb27183e6318443c63ee81a151f097d7bc571372579d5ff740473e5` |
+| `assets/audio/ambient-loop.mp3` | 3763947 | `801e903bca3242900ff5ef41e4540cd7a74dc9e53630b0a9ff911cfb69cc4dec` |
 
-Upload the real files at exactly:
+Neither asset is modified. Native HTML audio looping cannot guarantee sample-perfect continuity across all browsers; test the supplied MP3 seam on real devices.
 
-- `assets/model/baekje-incense-burner.glb`
-- `assets/audio/ambient-loop.mp3`
+## Preview
 
-The empty `.gitkeep` files preserve directories; they are not media substitutes.
-Asset URLs resolve relative to the JS module and support GitHub Pages repository subpaths.
-Phase 0 does not request the missing media.
-
-## Preview and deployment
-
-No build step or dependencies are required. From the repository root:
+From the repository root:
 
 ```sh
 python3 -m http.server 8000
 ```
 
-Open http://localhost:8000.
+Open http://localhost:8000. For a project-subpath check, serve the parent directory and open `/baekje-incense-experience/`.
 
-GitHub Pages is not configured in Phase 0. The project is compatible with later static deployment from `main`, folder `/ (root)`. No deployment workflow is included.
+## GitHub Pages
 
-## Before Phase 1
+The root is deployment-ready and `.nojekyll` is included. Enable branch publishing in repository **Settings → Pages → Deploy from a branch → main → / (root) → Save**.
 
-Review and approve initialization, then upload the real GLB and MP3.
-The next prototype will validate loading, mouse/touch rotation, zoom, desktop/mobile composition, user-initiated looping BGM, sound control, and mobile performance.
-Evaluate a simple viewer such as `<model-viewer>` before introducing Three.js.
-The nine experiential movements remain future creative directions.
+Expected URL after GitHub finishes deployment: https://dydfl1016.github.io/baekje-incense-experience/
+
+## Real-device review
+
+Check desktop and Android: initial framing, drag/pinch, small-screen controls, model load time on Wi-Fi/mobile data, prolonged rotation stability, sound activation/toggling and loop seam. Browser console logs time until the original GLB is ready (transfer + preparation); local/headless measurements are not mobile performance estimates.
+
+Phase 2 requires the owner's review and approval.
+
+## Environment validation
+
+Passed JS syntax and whitespace checks, local HTTP asset/path checks under the repository subpath, and mock-DOM tests for explicit audio activation/toggle, loading/error handling, and reset logic. Original asset SHA-256 hashes remain identical. Browser installation failed in the implementation environment, so rendering, mouse/physical touch, playback seam, and real mobile performance have not been tested.
