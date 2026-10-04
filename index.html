@@ -12,8 +12,8 @@
   <main class="experience" aria-labelledby="project-title">
     <header><h1 id="project-title">백제금동대향로</h1></header>
     <section class="stage" aria-label="향로 살펴보기" aria-busy="true">
-      <model-viewer id="artifact" alt="백제금동대향로 3D 모형. 드래그 또는 방향키로 회전하고 휠 또는 두 손가락으로 확대할 수 있습니다."
-        camera-controls touch-action="none" disable-pan interaction-prompt="none"
+      <model-viewer id="artifact" alt="백제금동대향로 3D 모형. 드래그 또는 방향키로 회전합니다. 휠 또는 핀치로 확대합니다. Shift와 드래그 또는 두 손가락을 함께 움직여 관찰 위치를 이동합니다."
+        camera-controls touch-action="none" disable-tap interaction-prompt="none"
         camera-orbit="0deg 75deg 105%" camera-target="auto auto auto"
         field-of-view="30deg" min-camera-orbit="auto 0deg 25%" max-camera-orbit="auto 180deg 160%"
         shadow-intensity="0.25" shadow-softness="1" exposure="1" loading="eager">
@@ -27,7 +27,7 @@
       <p id="model-error" class="status" role="alert" hidden>향로를 불러오지 못했습니다. 연결을 확인하고 페이지를 새로고침해 주세요.</p>
     </section>
     <footer>
-      <p class="hint">드래그로 회전 · 휠 / 두 손가락으로 확대</p>
+      <p class="hint">드래그로 회전 · 휠 / 핀치로 확대 · Shift+드래그 / 두 손가락 이동</p>
       <div class="controls">
         <button id="reset-view" type="button" disabled>처음 시점</button>
         <button id="sound-toggle" type="button" aria-pressed="false">소리 켜기</button>
