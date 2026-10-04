@@ -67,7 +67,7 @@ footer { min-height: 112px; }
 .discovery-signal::after {
   content: ''; display: block; margin: auto;
   width: var(--signal-dot); height: var(--signal-dot); border-radius: 50%;
-  background: #e8fff8; box-shadow: 0 0 5px 1px #527f7399;
+  background: #7FA9A3; box-shadow: none;
   opacity: var(--signal-opacity);
 }
 .discovery-signal[data-state="available"][data-visible] { opacity: 1; visibility: visible; pointer-events: auto; }
@@ -78,11 +78,9 @@ footer { min-height: 112px; }
 .discovery-signal[data-state="discovered"][data-spatial-visible="true"][data-visible] { opacity: 1; visibility: visible; pointer-events: none; }
 .discovery-signal[data-state="discovered"] .discovery-prompt { display: none; }
 .stage { --callout-safe: max(env(safe-area-inset-left), env(safe-area-inset-right), env(safe-area-inset-top), env(safe-area-inset-bottom)); }
-.discovery-leader { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; }
-.discovery-leader polyline { fill: none; stroke: #71958b; stroke-width: 1; vector-effect: non-scaling-stroke; }
-.discovery-leader.is-visible polyline { animation: leader-in calc(var(--callout-reveal) * .55) ease both; }
-@keyframes leader-in { from { stroke-dasharray: 1; stroke-dashoffset: 1; } to { stroke-dasharray: 1; stroke-dashoffset: 0; } }
-.discovery-text { position: absolute; width: var(--callout-width); padding: 12px 14px; border: 1px solid #b5c9c344; background: #fafbf9e6; transition: left .3s ease, top .3s ease, opacity .25s ease; }
+.discovery-leader { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 1; }
+.discovery-leader polyline { fill: none; stroke: #7FA9A3; stroke-width: 1.5px; stroke-opacity: .75; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.discovery-text { z-index: 2; position: absolute; width: var(--callout-width); padding: 12px 14px; border: 1px solid #b5c9c344; background: #fafbf9e6; transition: left .3s ease, top .3s ease, opacity .25s ease; }
 .discovery-text p, .discovery-text h2 { margin: 0 28px 7px 0; font-weight: 400; }
 .discovery-eyebrow { font-size: .65rem; letter-spacing: .16em; }
 .discovery-text h2 { font-size: 1.2rem; }
@@ -97,3 +95,9 @@ footer { min-height: 112px; }
   .discovery-signal, .discovery-text, .discovery-leader { transition: none; }
   .discovery-signal::after, .discovery-text.is-visible [data-copy], .discovery-leader.is-visible polyline { animation: none; }
 }
+
+/* Keep hotspots above the connector without trapping them in a viewer stacking context. */
+.discovery-signal { z-index: 2; }
+.discovery-leader.is-visible:not(.is-spatial-hidden) { animation: leader-fade-in .35s ease both; }
+@keyframes leader-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .discovery-leader.is-visible { animation: none; } }

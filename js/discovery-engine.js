@@ -82,7 +82,7 @@ export function createDiscoveryEngine({ viewer, stage, panel, items, isExploring
       element.textContent = text; element.style.setProperty('--text-delay', `${item.textTiming[`${key}Ms`]}ms`);
     }
     stage.dataset.discovery = 'discovered';
-    panel.hidden = false; leader.hidden = false;
+    panel.hidden = false; leader.removeAttribute('hidden');
     panel.classList.add('is-visible'); leader.classList.add('is-visible');
     track();
     record.button.setAttribute('aria-expanded', 'true');
@@ -127,7 +127,7 @@ export function createDiscoveryEngine({ viewer, stage, panel, items, isExploring
     ++generation; if (animationId !== null) cancelAnimationFrame(animationId); animationId = null;
     if (trackingId !== null) cancelAnimationFrame(trackingId); trackingId = null;
     panel.classList.remove('is-visible'); panel.hidden = true;
-    leader.classList.remove('is-visible'); leader.hidden = true;
+    leader.classList.remove('is-visible'); leader.setAttribute('hidden', '');
     delete stage.dataset.discovery;
     if (active) {
       // Freeze only a running staging move at the visible pose; never force a return view.
