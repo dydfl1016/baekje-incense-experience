@@ -50,25 +50,18 @@ Phase 2 requires the owner's review and approval.
 
 Passed JS syntax and whitespace checks, local HTTP asset/path checks under the repository subpath, and mock-DOM tests for explicit audio activation/toggle, loading/error handling, and reset logic. Original asset SHA-256 hashes remain identical. Browser installation failed in the implementation environment, so rendering, mouse/physical touch, playback seam, and real mobile performance have not been tested.
 
-## Phase 2B — Discovery Engine v0.1
+## Phase 2B.1 — Spatial callout prototype
 
-Only `phoenix-prototype` is implemented. All text is explicitly PLACEHOLDER content; no historical claims or additional points are added.
+One phoenix discovery, placeholder content only. Phase 2A entrance, BGM, free exploration, proximity conditions and reset remain unchanged. Source assets are byte-identical.
 
-- `js/discoveries.js`: region, anchor/normal, activation/target distances, camera orbit/target/FOV, staging time, text placement/reserved space/timing, signal appearance, content type, source and status.
-- `js/discovery-engine.js`: generic proximity gate, model-viewer slotted signal, camera staging, text and dismissal. Existing entrance/audio logic remains in `js/main.js`.
+`js/discoveries.js` holds the anchor/normal, proximity distances, camera orbit/target/FOV and 1600ms staging, prompt/offset, 6px dot / 44px hit area, box width/offset/preferred corner, margin, bend, 700ms reveal, placement hysteresis and off-screen margin. Future Blender replacements primarily require coordinate/camera tuning.
 
-Prototype anchor: (-0.021, 0.797, 0.029)m, near an actual vertex on the current phoenix geometry. Normal: (0, 0, 1). Tune this after Blender revisions. Preserve export origin/scale/orientation where possible; replacing the GLB does not require changes to the engine.
+`js/discovery-engine.js` uses model-viewer's `queryHotspot()` canvasPosition and facingCamera. The hotspot itself tracks the model; an SVG three-point polyline and HTML annotation use the projected coordinate translated into stage space. Tracking runs only while an annotation is open, including while temporarily hidden. Closing/disabling stops the loop. Camera controls remain enabled.
 
-The camera position is computed from model-viewer orbit + target. The signal requires camera-to-anchor <= 2.1m AND target-to-anchor <= 0.65m, plus front-facing and on-screen tests. A 0.15m hysteresis margin avoids threshold flicker. This is an approximate UX gate, not full mesh occlusion. It is disabled during loading/dawn/reveal and invisible in the approved full view.
+`js/callout-layout.js` chooses among four anchor-relative corners, clamps to safe margins, prefers the side opposite the anchor and uses a 60px center deadband plus score hysteresis. CSS eases placement; the leader endpoint follows the rendered box throughout the transition. This is a simple placement heuristic, not silhouette-aware collision avoidance.
 
-A model-viewer hotspot slot anchors a 6px soft point to the model, with an invisible 44px touch target. It fades in and breathes over 3.8s; reduced motion removes both transitions and pulse. On selection it disappears.
+Available prompt: 여기를 눌러보세요. Selection stages the existing camera. Input immediately cancels staging at the visible pose and opens the annotation; further orbit/pan/zoom keep it open. Reduced motion skips camera and reveal animations. Close/Escape remove the annotation without moving the camera; full-view closes it and performs the existing reset. Leaving/reentering the proximity region permits revisiting after close.
 
-Selection stages the camera over 1.6s (smoothstep) to orbit 0deg / 80deg / 1.2m, target (0, 0.65, 0)m and FOV 30deg. Camera controls stay enabled. Pointer, wheel or camera key input cancels staging before model-viewer handles the same input. Generation guards stop any late animation/text completion. Reduced motion skips staging.
+The SVG line grows first, then placeholder eyebrow/title/body/source fade in within approximately 700ms. The full-size model canvas is preserved; there is no reserved text strip. Off-screen margin, clip-depth and facingCamera tests hide line/box/anchor and remove hidden controls from interaction. They return when visible again. Facing-normal detection is an approximation: other geometry can still occlude the anchor; no mesh raycasting is added.
 
-A 148px strip below the detail canvas holds the small eyebrow, title, placeholder body and source; the artifact is never covered by text. This reserve exists only in Discovery mode and is removed on dismissal. Placement is a per-item setting, with simple corner options. No modal, opaque card or next button. Text fades/rises 3px with 0/140/280/400ms delays. A small accessible close button and Escape are available.
-
-Touching/manipulating the model hides text without resetting camera target, radius or angle. Reset explicitly dismisses then returns to the approved full view. The signal is suppressed until leaving its proximity region, allowing later revisits without immediate redisplay. Internal hidden/available/focused/discovered states and session visit memory have no visible progress or scores.
-
-Tune on Android: anchor/normal; activation and target distance; signal contrast/size/pulse; detail orbit/target/FOV; staging duration; reserved text strip size/placement; text delays. The neutral unfinished model may make tiny details and the signal less distinct; no material substitution is used.
-
-Validation: JS syntax/whitespace, unchanged asset hashes, pure proximity tests and mock-DOM normal/reduced-motion cycles passed. Tests cover entrance gating, selection, interruption, stale-frame cancellation, placeholder text, dismissal without a return camera move, and suppression/revisit. Phase 2A state-machine regression checks passed. These are not physical Android, WebGL or real multitouch tests.
+Validation: JS syntax/whitespace, original asset hashes, mock-DOM normal/reduced-motion proximity, interrupt, persistent exploration, moving projection/line, hide/return, close-pose and idle-loop checks passed. Placement bounds and small-motion stability checks passed. Phase 2A mock regression covers reveal/audio/reset. Real WebGL rendering and physical Android gestures/readability/performance are not tested; review the anchor, card overlap and line geometry on device before approving another phase.
