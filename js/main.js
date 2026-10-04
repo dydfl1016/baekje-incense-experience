@@ -1,3 +1,5 @@
+import { DISCOVERIES } from './discoveries.js';
+import { createDiscoveryEngine } from './discovery-engine.js';
 export const ASSET_URLS = Object.freeze({
   model: new URL('../assets/model/baekje-incense-burner.glb', import.meta.url).href,
   audio: new URL('../assets/audio/ambient-loop.mp3', import.meta.url).href,
@@ -19,6 +21,8 @@ const hint = $('#explore-hint');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let phase = 'loading', hintTimer, finalPose;
 const startedAt = performance.now();
+const discovery = createDiscoveryEngine({ viewer, stage, panel: $('#discovery-text'), items: DISCOVERIES,
+  isExploring: () => phase === 'exploring', reducedMotion, onSelect: hideHint });
 function setPhase(value) { phase = value; experience.dataset.phase = value; }
 function setMist(value) { experience.style.setProperty('--mist-opacity', String(value)); }
 function fullView() {
@@ -33,6 +37,7 @@ function applyPose(pose) {
   viewer.jumpCameraToGoal();
 }
 function modelFailed() {
+  discovery.disable();
   setPhase('error'); loading.hidden = true; enter.hidden = true;
   $('#model-error').hidden = false; stage.setAttribute('aria-busy', 'false');
   reset.disabled = true; controls.inert = true; viewer.cameraControls = false;
@@ -71,6 +76,7 @@ function handoff() {
   hint.classList.add('is-visible'); hintTimer = setTimeout(hideHint, ENTRANCE.hintMs);
   // Keyboard focus follows the removed entrance button without moving the page.
   viewer.focus({ preventScroll: true });
+  discovery.enable();
 }
 function reveal() {
   if (phase !== 'dawn') return;
@@ -101,7 +107,7 @@ viewer.addEventListener('camera-change', ({ detail }) => {
 });
 reset.addEventListener('click', () => {
   if (phase !== 'exploring') return;
-  fullView(); hideHint();
+  discovery.dismiss(); fullView(); hideHint();
   if (reducedMotion.matches) viewer.jumpCameraToGoal();
 });
 audio.src = ASSET_URLS.audio; audio.volume = 0.25;

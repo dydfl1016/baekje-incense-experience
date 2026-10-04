@@ -19,6 +19,13 @@
         shadow-intensity="0.25" shadow-softness="1" exposure="1" loading="eager" tabindex="-1">
         <span slot="progress-bar"></span>
       </model-viewer>
+      <aside id="discovery-text" class="discovery-text" hidden aria-live="polite" aria-atomic="true" aria-labelledby="discovery-title">
+        <p class="discovery-eyebrow" data-copy="eyebrow"></p>
+        <h2 id="discovery-title" data-copy="title"></h2>
+        <p class="discovery-body" data-copy="body"></p>
+        <p class="discovery-source" data-copy="source"></p>
+        <button type="button" class="discovery-close" aria-label="발견 설명 닫기">×</button>
+      </aside>
       <div id="mist" aria-hidden="true"></div>
       <button id="enter" class="entrance" type="button" hidden aria-label="향로 전체 모습과 배경음악으로 들어가기">화면을 터치하세요</button>
       <div id="loading" class="status" role="status" aria-live="polite">

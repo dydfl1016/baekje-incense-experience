@@ -1,4 +1,4 @@
-# Baekje Gilt-bronze Incense Burner — Phase 2A
+# Baekje Gilt-bronze Incense Burner — Phase 1
 
 백제금동대향로의 실제 원본을 탐색하는 반응형 기능 검증 프로토타입. LE ENGLISH와 분리된 독립 프로젝트입니다. 9개 장면과 최종 연출은 구현하지 않습니다.
 
@@ -7,11 +7,11 @@
 Static HTML/CSS/ES module, with Google `<model-viewer>` 4.1.0 loaded from a pinned unpkg URL. No build or package installation is required. The viewer uses its built-in lighting; no additional media or environmental assets are supplied. Runtime CDN access and WebGL are required.
 
 - Mouse drag / one-finger touch: orbit. Wheel / pinch: zoom. Arrow keys also rotate the focused viewer.
-- `↺` (전체 보기): restore the approved full-artifact orbit, target, and field of view. No auto-rotation.
-- Entrance tap starts quiet BGM with native audio looping. The accessible `♪ / ♫` sound button pauses/resumes playback.
+- `처음 시점`: restore the initial orbit, target, and field of view. No auto-rotation.
+- `소리 켜기`: explicit user-initiated playback, quiet volume, native audio loop. Toggle pauses/resumes without resetting playback.
 - Small viewer progress indicator; progress represents loading/preparation, not byte-accurate transfer. Model/CDN failure and audio failure show Korean messages.
 - A full-height stage with separate controls keeps phone gestures away from buttons; `touch-action="none"` prevents scrolling within the viewer. `100svh` and safe-area padding account for browser UI.
-- Reduced motion skips the cinematic camera movement and clears mist on entry. No particles.
+- Reduced motion removes camera interpolation. No scripted animation or particles.
 
 ## Protected source assets
 
@@ -44,20 +44,31 @@ Expected URL after GitHub finishes deployment: https://dydfl1016.github.io/baekj
 
 Check desktop and Android: initial framing, drag/pinch, small-screen controls, model load time on Wi-Fi/mobile data, prolonged rotation stability, sound activation/toggling and loop seam. Browser console logs time until the original GLB is ready (transfer + preparation); local/headless measurements are not mobile performance estimates.
 
-Discovery Points and later phases require the owner's review and approval.
+Phase 2 requires the owner's review and approval.
 
 ## Environment validation
 
 Passed JS syntax and whitespace checks, local HTTP asset/path checks under the repository subpath, and mock-DOM tests for explicit audio activation/toggle, loading/error handling, and reset logic. Original asset SHA-256 hashes remain identical. Browser installation failed in the implementation environment, so rendering, mouse/physical touch, playback seam, and real mobile performance have not been tested.
 
-## Phase 2A — continuous entrance
+## Phase 2B — Discovery Engine v0.1
 
-The same unmodified GLB supplies both the close mountain view and the complete artifact; no video or second scene. Real vertex bounds place the mountain geometry around y=0.15–0.60m. Initial orbit is 0° / 85° / 0.8m, target (0, 0.42, 0.08)m, FOV 30°. This is a geometry-based first composition, requiring visual tuning on Android.
+Only `phoenix-prototype` is implemented. All text is explicitly PLACEHOLDER content; no historical claims or additional points are added.
 
-All tunable values are grouped in `ENTRANCE` in `js/main.js`: opening orbit/target/FOV, final framing, 5000ms duration, 0.82 mist opacity, and 4500ms hint timing. The approved 105% full-view radius and auto target are resolved through the viewer after loading, so the end pose adapts to viewport framing.
+- `js/discoveries.js`: region, anchor/normal, activation/target distances, camera orbit/target/FOV, staging time, text placement/reserved space/timing, signal appearance, content type, source and status.
+- `js/discovery-engine.js`: generic proximity gate, model-viewer slotted signal, camera staging, text and dismissal. Existing entrance/audio logic remains in `js/main.js`.
 
-A single accessible full-stage entry button starts audio immediately in its click handler, then runs a requestAnimationFrame pull-back with quintic easing. Orbit radius, target, angle and FOV interpolate continuously while a static CSS mist layer fades. Camera controls are disabled until completion; afterward orbit, zoom and pan are restored, compact sound/reset controls appear, and the hint fades after its timeout or first user camera change. Reset returns to full view without replaying the entrance. Tap-to-recenter remains disabled; pan works with two fingers or Shift/right-button drag.
+Prototype anchor: (-0.021, 0.797, 0.029)m, near an actual vertex on the current phoenix geometry. Normal: (0, 0, 1). Tune this after Blender revisions. Preserve export origin/scale/orientation where possible; replacing the GLB does not require changes to the engine.
 
-The viewer is concealed until its close-up is prepared to avoid flashing the complete artifact before the reveal. Load/CDN failure retains a visible fallback. Reduced-motion entry hands off immediately rather than executing the camera animation.
+The camera position is computed from model-viewer orbit + target. The signal requires camera-to-anchor <= 2.1m AND target-to-anchor <= 0.65m, plus front-facing and on-screen tests. A 0.15m hysteresis margin avoids threshold flicker. This is an approximate UX gate, not full mesh occlusion. It is disabled during loading/dawn/reveal and invisible in the approved full view.
 
-Validation: JS syntax, mock-DOM state-machine tests (normal/reduced motion, no pre-entry audio, duplicate-entry guard, changing target, camera lock/unlock, reset and sound toggle), and unchanged source-asset hashes passed. These tests do not validate WebGL rendering or actual multitouch. Real Android review must check the landscape illusion, smoothness, final framing, sound policy and manipulation handoff. The existing browser-installation limitation still applies.
+A model-viewer hotspot slot anchors a 6px soft point to the model, with an invisible 44px touch target. It fades in and breathes over 3.8s; reduced motion removes both transitions and pulse. On selection it disappears.
+
+Selection stages the camera over 1.6s (smoothstep) to orbit 0deg / 80deg / 1.2m, target (0, 0.65, 0)m and FOV 30deg. Camera controls stay enabled. Pointer, wheel or camera key input cancels staging before model-viewer handles the same input. Generation guards stop any late animation/text completion. Reduced motion skips staging.
+
+A 148px strip below the detail canvas holds the small eyebrow, title, placeholder body and source; the artifact is never covered by text. This reserve exists only in Discovery mode and is removed on dismissal. Placement is a per-item setting, with simple corner options. No modal, opaque card or next button. Text fades/rises 3px with 0/140/280/400ms delays. A small accessible close button and Escape are available.
+
+Touching/manipulating the model hides text without resetting camera target, radius or angle. Reset explicitly dismisses then returns to the approved full view. The signal is suppressed until leaving its proximity region, allowing later revisits without immediate redisplay. Internal hidden/available/focused/discovered states and session visit memory have no visible progress or scores.
+
+Tune on Android: anchor/normal; activation and target distance; signal contrast/size/pulse; detail orbit/target/FOV; staging duration; reserved text strip size/placement; text delays. The neutral unfinished model may make tiny details and the signal less distinct; no material substitution is used.
+
+Validation: JS syntax/whitespace, unchanged asset hashes, pure proximity tests and mock-DOM normal/reduced-motion cycles passed. Tests cover entrance gating, selection, interruption, stale-frame cancellation, placeholder text, dismissal without a return camera move, and suppression/revisit. Phase 2A state-machine regression checks passed. These are not physical Android, WebGL or real multitouch tests.
